@@ -15,6 +15,7 @@ import type { ReactElement } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import AppSidebar, { type NavItemDef } from '@/components/nav/AppSidebar';
+import UserMenu from '@/components/nav/UserMenu';
 import Chat from '@/pages/user/Chat';
 import Report from '@/pages/user/Report';
 import Sessions from '@/pages/user/Sessions';
@@ -44,10 +45,10 @@ export function UserApp(): ReactElement {
           <AppSidebar items={USER_NAV} side="user" brandSubtitle="用户端" />
 
           <div className="app-main">
-            {/* 顶栏：M1 接入用户信息与登出，M5 接入会话切换 */}
+            {/* 顶栏：M1 已接入当前用户信息与登出（UserMenu）；M5 接入会话切换 */}
             <header className="app-topbar">
               <span className="page-subtitle">用户端 · 对话式数据分析</span>
-              <span className="page-subtitle">M0 骨架</span>
+              <UserMenu side="user" />
             </header>
 
             <main className="app-content">

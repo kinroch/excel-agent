@@ -25,6 +25,7 @@ export type IconName =
   | 'users'
   | 'logout'
   | 'upload'
+  | 'warning'
   | 'arrow-right';
 
 /** 图标路径表：每项为一组 SVG 子元素 */
@@ -92,6 +93,13 @@ const ICON_PATHS: Record<IconName, ReactElement> = {
     <>
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
       <path d="M17 8l-5-5-5 5M12 3v12" />
+    </>
+  ),
+  // 警示：三角感叹号（登录页守卫/异常提示条使用）
+  warning: (
+    <>
+      <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <path d="M12 9v4M12 17h.01" />
     </>
   ),
   // 箭头

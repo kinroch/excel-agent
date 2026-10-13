@@ -11,6 +11,7 @@ import type { ReactElement } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import AppSidebar, { type NavItemDef } from '@/components/nav/AppSidebar';
+import UserMenu from '@/components/nav/UserMenu';
 import AdminSessions from '@/pages/admin/AdminSessions';
 import Dashboard from '@/pages/admin/Dashboard';
 import Users from '@/pages/admin/Users';
@@ -38,7 +39,7 @@ export function AdminApp(): ReactElement {
           <div className="app-main">
             <header className="app-topbar">
               <span className="page-subtitle">管理后台 · 全局运营</span>
-              <span className="page-subtitle">M0 骨架</span>
+              <UserMenu side="admin" />
             </header>
 
             <main className="app-content">

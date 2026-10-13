@@ -122,12 +122,90 @@
   cursor: pointer;
 }
 
-.auth-notice {
-  padding: var(--sp-3);
-  border-radius: var(--r-xs);
+/* 密码强度条（组件规范 .strength：3 段 4px 高圆角条，点亮段主色） */
+.auth-strength {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.strength {
+  display: flex;
+  gap: var(--sp-1);
+  flex: 1;
+}
+
+.strength i {
+  height: 4px;
+  flex: 1;
+  border-radius: var(--r-pill);
+  background: var(--divider);
+}
+
+.strength i.on {
+  background: var(--primary);
+}
+
+.auth-strength__label {
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  color: var(--text-5);
+  white-space: nowrap;
+}
+
+/* 提示条：守卫提示（warn）与异常提示（error）共用结构 */
+.auth-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
   background: var(--surface-2);
   font-size: var(--fs-caption);
+  line-height: 1.6;
   color: var(--text-2);
+}
+
+.auth-alert svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--primary);
+}
+
+.auth-alert--warn svg,
+.auth-alert--error svg {
+  color: var(--status-warn);
+}
+
+.auth-alert--error {
+  border-color: var(--status-warn);
+}
+
+.auth-alert__hint {
+  display: block;
+  margin-top: var(--sp-1);
+  font-style: normal;
+  color: var(--text-4);
+}
+
+/* 登录身份说明（AC-4.1-4 双端角色区分） */
+.auth-role-hint {
+  font-size: var(--fs-caption);
+  line-height: 1.6;
+  color: var(--text-4);
+}
+
+.auth-role-hint__link {
+  margin-left: var(--sp-2);
+  color: var(--primary-text);
+  font-weight: var(--fw-medium);
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .auth-back {

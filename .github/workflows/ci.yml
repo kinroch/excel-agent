@@ -42,6 +42,9 @@ jobs:
       - name: 建库并校验表与索引（幂等 AC）
         run: python scripts/init_db.py --verify
 
+      - name: ORM 模型与建表脚本对账（M1 引入）
+        run: python scripts/check_models.py
+
       - name: 单元测试（pytest）
         run: pytest -q
 

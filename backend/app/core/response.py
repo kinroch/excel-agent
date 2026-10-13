@@ -17,11 +17,36 @@ HTTP 状态码同时表达错误类别（见 core/errors.py 错误码表的 http
 本模块不抛异常，纯函数式构造。
 """
 
-from typing import Any
+from typing import Any, Generic, TypeVar
 
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
 from app.core.errors import get_error
+
+# ============================================================
+# 统一响应体的「类型化信封」（供各路由以 response_model 声明）
+# ============================================================
+# 说明：
+#   上面三个函数负责**运行时构造**响应体；下面这个泛型模型负责**静态描述**响应体结构。
+#   若路由只返回 dict 而不声明 response_model，OpenAPI 文档会把 data 画成无类型的
+#   object，前端无法据文档生成类型。使用 `Envelope[RegisterResponse]` 后，
+#   /docs 能如实展示 {code, message, data:{...}} 的完整层级，接口契约一目了然。
+_T = TypeVar("_T")
+
+
+class Envelope(BaseModel, Generic[_T]):
+    """统一响应体信封（技术文档 5.2）。
+
+    字段：
+        code (int): 0 表示成功；非 0 为业务错误码（见 errors.ERRORS）
+        message (str): 提示文案，成功固定为 "ok"
+        data (_T | None): 业务数据载荷；失败时为 None
+    """
+
+    code: int = 0
+    message: str = "ok"
+    data: _T | None = None
 
 
 def success(data: Any = None, message: str = "ok") -> dict[str, Any]:

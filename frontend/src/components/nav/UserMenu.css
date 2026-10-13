@@ -1,0 +1,67 @@
+/* UserMenu.css —— 顶栏用户菜单样式（全部引用 tokens.css 令牌，禁止硬编码色值） */
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* 头像：圆形，品牌渐变色底白字 */
+.user-menu__avatar {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-full);
+  background: var(--gradient-brand);
+  color: var(--surface);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+}
+
+.user-menu__meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  min-width: 0;
+}
+
+.user-menu__name {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--text-1);
+}
+
+.user-menu__role {
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  color: var(--text-5);
+}
+
+/* 登出：静默文字按钮，hover 变警示红（UI/UX 交互纪律：仅变色不位移） */
+.user-menu__logout {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xs);
+  background: var(--surface);
+  color: var(--text-3);
+  font-size: var(--fs-caption);
+  cursor: pointer;
+  transition:
+    color var(--dur-hover),
+    border-color var(--dur-hover);
+}
+
+.user-menu__logout:hover {
+  color: var(--status-warn);
+  border-color: var(--status-warn);
+}
