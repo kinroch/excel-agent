@@ -1,0 +1,88 @@
+/* index-page.css —— 交付入口页样式（全部引用 tokens.css 令牌） */
+
+.index-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-8);
+  padding: var(--sp-9) var(--sp-6);
+}
+
+.index-page__hero {
+  text-align: center;
+}
+
+/* 主标题使用品牌渐变文字裁切（UI/UX 4.1 --gradient-text） */
+.index-page__title {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.index-page__desc {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-lead);
+  color: var(--text-3);
+}
+
+.index-page__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--sp-5);
+  width: 100%;
+  max-width: var(--content-wide);
+}
+
+.entry-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-6);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--text-1);
+  box-shadow: var(--shadow-glow);
+  transition: box-shadow var(--dur-hover), border-color var(--dur-hover);
+}
+
+.entry-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-lift);
+}
+
+.entry-card svg { color: var(--primary); }
+
+.entry-card__title {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h3-card);
+  font-weight: var(--fw-semibold);
+}
+
+.entry-card__desc {
+  font-size: var(--fs-card-desc);
+  color: var(--text-3);
+}
+
+.entry-card__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+  font-size: var(--fs-caption);
+  color: var(--primary-text);
+  font-weight: var(--fw-medium);
+}
+
+.index-page__status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+  font-size: var(--fs-caption);
+  color: var(--text-4);
+}

@@ -1,0 +1,37 @@
+{
+  "name": "excel-data-agent-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Excel 对话式数据分析智能体 · 前端（用户端 + 管理后台双端多入口 SPA）",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.59.0",
+    "antd": "^5.21.4",
+    "axios": "^1.7.7",
+    "echarts": "5.5.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
+    "@typescript-eslint/parser": "^8.8.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8"
+  }
+}

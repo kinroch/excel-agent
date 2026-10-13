@@ -1,0 +1,41 @@
+# ============================================================
+#  Git 行尾与文本属性策略
+#  目的：跨平台协作时消除 CRLF/LF 差异，并保证批处理文件在
+#        Windows cmd 下可正常解析（必须 CRLF）。
+# ============================================================
+
+# 默认：由 Git 自动判定文本文件并做行尾归一化
+* text=auto
+
+# ---------- 必须 CRLF（Windows 原生脚本） ----------
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# ---------- 使用 LF（源码与类 Unix 配置） ----------
+*.sh   text eol=lf
+*.py   text eol=lf
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.css  text eol=lf
+*.sql  text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+
+# ---------- 二进制（不做行尾转换） ----------
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.svg    text
+*.woff   binary
+*.woff2  binary
+*.docx   binary
+*.xlsx   binary
+*.db     binary
+
+# ---------- 语言识别（GitHub 统计用） ----------
+*.py  linguist-language=Python
+*.tsx linguist-language=TypeScript

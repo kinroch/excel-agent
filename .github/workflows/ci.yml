@@ -1,0 +1,80 @@
+# ============================================================
+#  持续集成流水线（依据《项目开发实施方案》M0「仓库/CI」与
+#  《开发技术文档 V1.0.1》7.4「质量门禁」）
+#
+#  门禁标准：ruff / eslint / tsc 零 error；pytest 全过；建表脚本幂等校验通过。
+# ============================================================
+name: CI
+
+on:
+  push:
+    branches: [main, dev, 'feature/**']
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch: # 支持手动触发
+
+jobs:
+  # ---------------- 后端：静态检查 + 建库校验 + 单元测试 ----------------
+  backend:
+    name: 后端（ruff + 建库校验 + pytest）
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: 安装依赖
+        run: pip install -r requirements-dev.txt
+
+      - name: 静态检查（ruff，零 error）
+        run: ruff check .
+
+      - name: 建库并校验表与索引（幂等 AC）
+        run: python scripts/init_db.py --verify
+
+      - name: 单元测试（pytest）
+        run: pytest -q
+
+  # ---------------- 前端：类型检查 + 静态检查 + 生产构建 ----------------
+  frontend:
+    name: 前端（tsc + eslint + build）
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 设计令牌一致性校验（tokens.css ↔ UI/UX 第 4 章）
+        run: python3 ../tools/check_tokens.py
+
+      - name: 类型检查（tsc strict，零 error）
+        run: npm run typecheck
+
+      - name: 静态检查（eslint，零 error）
+        run: npm run lint
+
+      - name: 生产构建（五入口）
+        run: npm run build

@@ -1,0 +1,159 @@
+/* ============================================================
+   base.css —— 全局重置、氛围装饰层与应用外壳布局
+   依据：UI/UX 设计文档 2.2 设计基调、4.4 装饰层；
+        技术文档 6.1「base.css：重置 + 氛围光晕/网格底纹装饰层」
+   纪律：本文件同样禁止硬编码色值/字号，一律引用 tokens.css 的 var(--x)。
+   ============================================================ */
+
+/* ---------------- 1. 全局重置基线 ---------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: 1.5;
+  color: var(--text-1);
+  background: transparent;
+  isolation: isolate;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-semibold);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--dur-hover);
+}
+
+ul { list-style: none; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------------- 2. 背景氛围层（装饰只作用于视觉，不改变组件结构） ---------------- */
+
+/* 青蓝光晕：多层 radial-gradient + 呼吸动画 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 5%,  rgba(30, 111, 232, .13), transparent),
+    radial-gradient(ellipse 60% 50% at 15% 35%, rgba(30, 111, 232, .10), transparent),
+    radial-gradient(ellipse 50% 45% at 85% 55%, rgba(30, 111, 232, .07), transparent),
+    radial-gradient(ellipse 55% 50% at 25% 75%, rgba(30, 111, 232, .08), transparent),
+    radial-gradient(ellipse 50% 40% at 75% 90%, rgba(30, 111, 232, .07), transparent);
+  animation: 9s ease-in-out infinite gradient-pulse;
+}
+
+@keyframes gradient-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .72; }
+}
+
+/* 科技网格底纹（大屏标志性元素） */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(30, 111, 232, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 111, 232, .05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 20%, transparent 80%);
+}
+
+/* ---------------- 3. 应用外壳布局（M0 骨架期通用结构） ---------------- */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 侧栏：用户端 220px / 管理端 220px，由修饰类切换 */
+.app-sidebar {
+  width: var(--shell-sidebar-user);
+  flex: 0 0 auto;
+  padding: var(--sp-5) var(--sp-4);
+  border-right: 1px solid var(--divider);
+  background: var(--nav-bg);
+  backdrop-filter: blur(35px);
+  -webkit-backdrop-filter: blur(35px);
+}
+
+.app-sidebar--admin {
+  width: var(--shell-sidebar-admin);
+}
+
+/* 主区：顶栏 + 内容 */
+.app-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--sp-6);
+  border-bottom: 1px solid var(--divider);
+  background: var(--nav-bg);
+  backdrop-filter: blur(35px);
+  -webkit-backdrop-filter: blur(35px);
+}
+
+.app-content {
+  flex: 1 1 auto;
+  padding: var(--sp-6);
+}
+
+/* 页面标题（页面标题实测 24px，见 UI/UX 4.2） */
+.page-title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--text-1);
+}
+
+.page-subtitle {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-card-desc);
+  color: var(--text-3);
+}
+
+/* ---------------- 4. 无障碍与滚动条 ---------------- */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--r-full);
+}
+::-webkit-scrollbar-track { background: transparent; }

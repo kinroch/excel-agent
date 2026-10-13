@@ -1,0 +1,92 @@
+# ============================================================
+#  Excel 对话式数据分析智能体 · Nginx 站点配置示例
+#  依据：《开发技术文档 V1.0.1》2.5 部署架构 / 10.2 部署步骤
+#  用途：HTTPS 终结 + 前端静态托管 + /api 反向代理（含 SSE 关闭缓冲）
+#  使用：复制为 /etc/nginx/conf.d/eda.conf 后按环境替换域名与证书路径
+#
+#  ⚠ 前置说明：本文件中 your-domain.example.com、证书路径、静态目录均需替换。
+# ============================================================
+
+upstream eda_backend {
+    # 应用服务仅监听回环地址，不直接对外暴露（NFR-S1）
+    server 127.0.0.1:8000;
+}
+
+server {
+    listen       443 ssl;
+    http2        on;
+    server_name  your-domain.example.com;
+
+    # ---------- TLS（NFR-S1，TLS1.2+） ----------
+    ssl_certificate      /etc/nginx/ssl/eda.crt;
+    ssl_certificate_key  /etc/nginx/ssl/eda.key;
+    ssl_protocols        TLSv1.2 TLSv1.3;
+    ssl_ciphers          HIGH:!aNULL:!MD5;
+    ssl_session_cache    shared:SSL:10m;
+    ssl_session_timeout  10m;
+
+    # ---------- 安全响应头 ----------
+    add_header X-Content-Type-Options nosniff always;
+    add_header X-Frame-Options SAMEORIGIN always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+
+    # ---------- 前端静态资源（npm run build 产物） ----------
+    root  /srv/eda/frontend/dist;
+    index index.html;
+
+    # 带哈希的构建产物可长期缓存
+    location /assets/ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # ---------- 用户端深层路由回退 ----------
+    # 直接访问 /workspace 等路径时回到 user.html，由前端路由接管
+    location ~ ^/(workspace|chat|report|sessions|stats)$ {
+        try_files $uri /user.html;
+    }
+
+    # ---------- 管理端深层路由回退 ----------
+    location ~ ^/(dashboard|users)$ {
+        try_files $uri /admin.html;
+    }
+    #
+    # ⚠ 已知重叠：用户端与管理端均定义了 /sessions（UI/UX 3.4）。
+    #   本配置将 /sessions 归用户端（user.html）；管理端「会话记录」通过
+    #   admin.html 内部导航进入，地址栏仍显示 /sessions 时由 admin.html 正常渲染。
+    #   建议 M6 阶段与需求方确认是否将管理端路由改为 /admin/sessions（需同步修订 UI/UX 3.4）。
+
+    # ---------- 入口与其它静态文件 ----------
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # ---------- 接口反向代理 ----------
+    location /api/ {
+        proxy_pass         http://eda_backend;
+        proxy_http_version 1.1;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+
+        # SSE 事件流（T3）必须关闭代理缓冲，否则进度事件会被攒批延迟
+        proxy_buffering    off;
+        proxy_cache        off;
+        proxy_set_header   Connection        '';
+        # 分析链路含大模型调用，读超时放宽至 300s
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+    }
+
+    # ---------- 上传大小与后端上限保持一致（50MB，F-4.2-2） ----------
+    client_max_body_size 50m;
+}
+
+# ---------- HTTP 强制跳转 HTTPS（F-4.7-4） ----------
+server {
+    listen       80;
+    server_name  your-domain.example.com;
+    return 301   https://$host$request_uri;
+}

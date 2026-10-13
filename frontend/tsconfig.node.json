@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    /* 用于覆盖 Vite 自身配置文件（vite.config.ts）的类型检查；
+       不使用 composite/project references，避免与 noEmit 冲突 */
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["vite.config.ts"]
+}

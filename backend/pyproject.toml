@@ -1,0 +1,53 @@
+# ============================================================
+#  后端工程配置（ruff 静态检查 + pytest 测试）
+#  质量门禁依据《开发技术文档 V1.0.1》7.4「质量门禁」
+# ============================================================
+
+[tool.ruff]
+# 目标 Python 版本与语言特性
+target-version = "py312"
+# 行宽上限：项目含大量中文注释，放宽至 120 字符
+line-length = 120
+# 排除运行期产物与非源码目录
+exclude = [
+    "__pycache__",
+    ".venv",
+    "venv",
+    "data",
+    "uploads",
+    "exports",
+    "logs",
+    "alembic",
+]
+
+[tool.ruff.lint]
+# 启用规则集：
+#   E/W  pycodestyle 常见风格问题
+#   F    pyflakes 未使用变量 / 未定义名称
+#   I    isort 导入排序
+#   B    flake8-bugbear 常见缺陷
+#   UP   pyupgrade 语法现代化
+#   C4   flake8-comprehensions 推导式优化
+select = ["E", "W", "F", "I", "B", "UP", "C4"]
+# 忽略项说明：
+#   E501 行宽交由编辑器软约束：中文注释按显示宽度计算易误报
+#   UP009 Python 3 默认 UTF-8 源文件，本行编码声明技术上冗余；
+#         但本项目全部源码含中文注释，保留显式声明可避免部分 Windows 工具链按 GBK 解码
+ignore = ["E501", "UP009"]
+
+[tool.ruff.lint.per-file-ignores]
+# 脚本与测试允许更宽松的风格
+"scripts/*" = ["E402"]
+"tests/*" = ["S101"]
+
+[tool.pytest.ini_options]
+# 测试目录
+testpaths = ["tests"]
+# 测试文件命名规则
+python_files = ["test_*.py"]
+# 输出：显示简短的失败摘要
+addopts = "-q"
+# 异步测试模式
+asyncio_mode = "auto"
+# 显式声明异步 fixture 的事件循环作用域，消除 pytest-asyncio 弃用告警
+asyncio_default_fixture_loop_scope = "function"

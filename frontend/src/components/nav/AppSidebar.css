@@ -1,0 +1,84 @@
+/* AppSidebar.css —— 应用侧栏导航样式（令牌全部引用 tokens.css，禁止硬编码） */
+
+.app-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3) var(--sp-5);
+}
+
+/* Logo 底：品牌渐变 + 圆角（UI/UX 4.1 渐变 --gradient-brand） */
+.app-sidebar__logo {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  border-radius: var(--r-xs);
+  background: var(--gradient-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--surface);
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-caption);
+}
+
+.app-sidebar__title {
+  font-size: var(--fs-card-desc);
+  font-weight: var(--fw-semibold);
+  color: var(--text-1);
+  line-height: 1.2;
+}
+
+.app-sidebar__section {
+  margin-top: var(--sp-4);
+  padding: 0 var(--sp-3) var(--sp-2);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-5);
+}
+
+/* 导航项：默认态 / hover / 激活态 */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  margin-bottom: var(--sp-1);
+  border-radius: var(--r-md);
+  font-size: var(--fs-card-desc);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background var(--dur-hover), color var(--dur-hover);
+}
+
+/* hover 不引起布局位移（UI/UX 5 章交互纪律） */
+.nav-item:hover {
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+/* 激活态：品牌渐变文字裁切 */
+.nav-item.is-active {
+  background: var(--surface-2);
+  font-weight: var(--fw-semibold);
+  background-clip: padding-box;
+}
+
+.nav-item.is-active .nav-item__label {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.nav-item.is-active svg {
+  color: var(--primary);
+}
+
+.app-sidebar__footer {
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--divider);
+}

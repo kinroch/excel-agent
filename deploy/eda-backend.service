@@ -1,0 +1,42 @@
+# ============================================================
+#  Excel 对话式数据分析智能体 · systemd 服务单元示例
+#  依据：《开发技术文档 V1.0.1》10.2 部署步骤（uvicorn 由 systemd 托管，自动重启）
+#  使用：复制为 /etc/systemd/system/eda-backend.service，
+#        按环境替换 User / WorkingDirectory / EnvironmentFile 后执行：
+#          systemctl daemon-reload && systemctl enable --now eda-backend
+# ============================================================
+
+[Unit]
+Description=Excel 对话式数据分析智能体 · 应用服务（FastAPI）
+After=network.target
+
+[Service]
+Type=simple
+User=eda
+Group=eda
+
+# 代码根目录（含 app/ 与 .env）
+WorkingDirectory=/srv/eda/backend
+EnvironmentFile=/srv/eda/backend/.env
+
+# 仅监听回环地址，外部访问统一经 Nginx 反向代理（NFR-S1）
+ExecStart=/srv/eda/backend/.venv/bin/uvicorn app.main:app \
+    --host 127.0.0.1 \
+    --port 8000 \
+    --workers 1 \
+    --log-level info
+
+# 崩溃自动重启
+Restart=always
+RestartSec=3
+
+# 优雅停止：等待在途分析任务落库
+KillSignal=SIGINT
+TimeoutStopSec=30
+
+# 运行目录权限与日志
+StandardOutput=append:/srv/eda/logs/systemd.out.log
+StandardError=append:/srv/eda/logs/systemd.err.log
+
+[Install]
+WantedBy=multi-user.target
