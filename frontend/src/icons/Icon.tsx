@@ -26,7 +26,14 @@ export type IconName =
   | 'logout'
   | 'upload'
   | 'warning'
-  | 'arrow-right';
+  | 'arrow-right'
+  // —— M2 数据工作台新增 ——
+  | 'arrow-left'
+  | 'info'
+  | 'shield'
+  | 'trash'
+  | 'close'
+  | 'file';
 
 /** 图标路径表：每项为一组 SVG 子元素 */
 const ICON_PATHS: Record<IconName, ReactElement> = {
@@ -102,8 +109,42 @@ const ICON_PATHS: Record<IconName, ReactElement> = {
       <path d="M12 9v4M12 17h.01" />
     </>
   ),
-  // 箭头
+  // 箭头（右）
   'arrow-right': <path d="M5 12h14M13 6l6 6-6 6" />,
+  // 箭头（左）—— 数据预览「上一页」
+  'arrow-left': <path d="M19 12H5M11 18l-6-6 6-6" />,
+  // 信息：实心圆中的 i —— 解析处理说明行 / 策略说明行
+  info: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 16v-5M12 8h.01" />
+    </>
+  ),
+  // 盾牌 —— 敏感字段「分析前脱敏」标记与合规说明
+  shield: (
+    <>
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      <path d="M9 12l2 2 4-4" />
+    </>
+  ),
+  // 垃圾桶 —— 删除操作与删除确认弹窗
+  trash: (
+    <>
+      <path d="M3 6h18" />
+      <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6M14 11v6" />
+    </>
+  ),
+  // 叉号 —— 关闭警示条
+  close: <path d="M18 6 6 18M6 6l12 12" />,
+  // 文件 —— 数据体检区块头的「当前文件」徽标
+  file: (
+    <>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6" />
+    </>
+  ),
 };
 
 /** Icon 组件属性 */

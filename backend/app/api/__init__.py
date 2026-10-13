@@ -14,7 +14,7 @@ M0 阶段仅挂载健康检查；后续里程碑按模块追加：
 
 from fastapi import APIRouter
 
-from app.api import auth, health
+from app.api import auth, files, health
 
 # 全站 API 总路由（由 main.py 以 settings.api_prefix 为前缀挂载）
 api_router = APIRouter()
@@ -24,3 +24,6 @@ api_router.include_router(health.router, tags=["health"])
 
 # 认证与权限（M1）——A1 注册 / A2 登录 / A3 登出 / A4 当前用户
 api_router.include_router(auth.router)
+
+# 文件与解析（M2）——F1 上传 / F2 列表 / F3 详情 / F4 删除 / F5 Sheet / F6 字段 / F7 预览 / F8 策略
+api_router.include_router(files.router)

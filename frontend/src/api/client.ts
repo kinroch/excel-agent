@@ -98,11 +98,28 @@ export function readToken(): string | null {
   }
 }
 
-/** 全站 axios 实例 */
+/**
+ * 全站 axios 实例。
+ *
+ * ⚠ 这里**刻意不设置全局 `Content-Type`**，原因是一个真实踩到的坑：
+ *   axios 1.x 的 `defaults.transformRequest` 里有这样一条判据——
+ *       isFormData(data) ? (hasJSONContentType ? JSON.stringify(formDataToJSON(data)) : data) : ...
+ *   其中 `hasJSONContentType` 取自**请求头**。只要实例默认头里带了
+ *   `application/json`，上传时塞进去的 `FormData` 就会被先转成 JSON 字符串；
+ *   而 `formDataToJSON` 只处理字符串/数组，会**直接丢弃 File / Blob**，
+ *   最终发出的请求体是空对象 `{}`，后端必然报
+ *   `参数错误[body.file]：Field required`。
+ *
+ *   症状具有极强的误导性：网络面板里请求确实发出去了、也确实是 POST，
+ *   但文件永远传不过去。该缺陷只有在**真实浏览器**里才暴露（M2 E2E 拦截到）。
+ *
+ * 不设默认头不会影响 JSON 接口：axios 的 transformRequest 遇到普通对象时
+ * 会自动补 `Content-Type: application/json`；而 FormData 则原样透传，
+ * 交由浏览器写入带 `boundary` 的 `multipart/form-data`。
+ */
 export const http: AxiosInstance = axios.create({
   baseURL: '/api/v1',
   timeout: 30_000,
-  headers: { 'Content-Type': 'application/json' },
 });
 
 // ---------------- 请求拦截：附加令牌 ----------------

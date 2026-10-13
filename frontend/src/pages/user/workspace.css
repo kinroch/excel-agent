@@ -1,0 +1,663 @@
+/* ============================================================
+   workspace.css —— 数据工作台样式（UI/UX 6.3 user.html · ai-workspace）
+
+   纪律（UI/UX 附录 A 第一条）：
+     颜色 / 字号 / 字重 / 间距 / 圆角 / 阴影 / 动效时长**一律引用 tokens.css 变量**，
+     本文件不出现任何硬编码色值与字号。结构性尺寸（栅格比例、最小宽度、表格行高）
+     不属于设计令牌范畴，按需显式书写。
+   ============================================================ */
+
+/* ---------------- 页面容器 ---------------- */
+.ws {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  width: 100%;
+  max-width: var(--container);
+}
+
+/* ---------------- 页头 ---------------- */
+.ws-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+
+.ws-head-main {
+  min-width: 0;
+}
+
+.ws-desc {
+  margin-top: var(--sp-2);
+  max-width: var(--content-mid);
+  font-size: var(--fs-card-desc);
+  color: var(--text-3);
+}
+
+.ws-head-side {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+/* 「已上传 N 个可分析文件」chip */
+.ws-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  font-size: var(--fs-caption);
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+/* ---------------- 按钮 ---------------- */
+.ws-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  font-size: var(--fs-card-desc);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background var(--dur-hover), color var(--dur-hover), border-color var(--dur-hover);
+}
+
+.ws-btn--primary {
+  background: var(--primary);
+  color: var(--surface);
+  box-shadow: var(--shadow-glow);
+}
+
+.ws-btn--primary:hover:not(:disabled) {
+  background: var(--primary-strong);
+}
+
+.ws-btn--outline {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+}
+
+.ws-btn--outline:hover:not(:disabled) {
+  border-color: var(--primary-light);
+  color: var(--primary-text);
+}
+
+.ws-btn--danger {
+  background: var(--status-warn);
+  color: var(--surface);
+}
+
+.ws-btn--danger:hover:not(:disabled) {
+  background: var(--semantic-up);
+}
+
+.ws-btn--sm {
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--r-xs);
+  font-size: var(--fs-caption);
+}
+
+.ws-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* ---------------- 警示条（AC-4.2-3 拒绝/失败原因） ---------------- */
+.ws-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  font-size: var(--fs-card-desc);
+  color: var(--text-2);
+}
+
+.ws-notice--warn {
+  border-color: var(--status-warn);
+  color: var(--status-warn);
+}
+
+.ws-notice-body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  width: 100%;
+}
+
+.ws-notice-close {
+  display: inline-flex;
+  flex: 0 0 auto;
+  padding: var(--sp-1);
+  border: none;
+  border-radius: var(--r-full);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ---------------- 区块骨架 ---------------- */
+.ws-sec {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.ws-sec-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.ws-sec-num {
+  font-family: var(--ff-num);
+  font-size: var(--fs-h3-card);
+  font-weight: var(--fw-bold);
+  color: var(--primary);
+  letter-spacing: .04em;
+}
+
+.ws-sec-titles {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ws-sec-title {
+  font-size: var(--fs-h3-card);
+  font-weight: var(--fw-semibold);
+  color: var(--text-1);
+}
+
+.ws-sec-sub {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-caption);
+  color: var(--text-3);
+}
+
+.ws-ref {
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--r-xs);
+  background: var(--surface-2);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: .08em;
+  color: var(--text-4);
+  white-space: nowrap;
+}
+
+/* 主列 : 右列 = 2 : 1（UI/UX 6.3「主列与右列 2:1 栅格」） */
+.ws-grid {
+  display: grid;
+  gap: var(--sp-5);
+}
+
+.ws-grid--main {
+  grid-template-columns: 2fr 1fr;
+}
+
+.ws-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ws-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+/* ---------------- 面板 ---------------- */
+.ws-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--sp-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-glow);
+}
+
+.ws-p-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.ws-p-title {
+  font-size: var(--fs-h3-card);
+  font-weight: var(--fw-semibold);
+  color: var(--text-1);
+}
+
+.ws-p-sub {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-caption);
+  color: var(--text-3);
+}
+
+/* ---------------- 表格 ---------------- */
+.ws-table-wrap {
+  margin-top: var(--sp-5);
+  overflow-x: auto;
+}
+
+.ws-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-card-desc);
+  color: var(--text-2);
+}
+
+.ws-table th,
+.ws-table td {
+  padding: var(--sp-3);
+  border-bottom: 1px solid var(--divider);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.ws-table th {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-semibold);
+  letter-spacing: .08em;
+  color: var(--text-4);
+  text-transform: uppercase;
+}
+
+.ws-table tbody tr {
+  cursor: pointer;
+  transition: background var(--dur-hover);
+}
+
+.ws-table tbody tr:hover {
+  background: var(--surface-2);
+}
+
+.ws-table tbody tr.is-selected {
+  background: var(--surface-2);
+}
+
+.ws-table--preview tbody tr {
+  cursor: default;
+}
+
+/* 翻页中：整表轻微降透明度，作为「正在加载」的弱提示（不做骨架屏以避免跳动） */
+.ws-table--preview.is-loading {
+  opacity: .6;
+}
+
+.ws-rowno {
+  width: 1%;
+  font-family: var(--ff-num);
+  color: var(--text-4);
+}
+
+.ws-num {
+  text-align: right;
+}
+
+.ws-strong {
+  font-weight: var(--fw-medium);
+  color: var(--text-1);
+}
+
+.ws-muted {
+  color: var(--text-3);
+}
+
+/* 高缺失率标注用红（国内惯例：红=需关注） */
+.ws-up {
+  color: var(--semantic-up);
+}
+
+.ws-accent {
+  color: var(--primary-text);
+}
+
+.ws-row-time {
+  display: block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-regular);
+  color: var(--text-4);
+}
+
+/* 行内文字链（查看 / 删除） */
+.ws-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: var(--fs-caption);
+  color: var(--primary-text);
+  cursor: pointer;
+}
+
+.ws-link:hover {
+  text-decoration: underline;
+}
+
+.ws-link-sep {
+  margin: 0 var(--sp-1);
+  color: var(--border);
+}
+
+/* ---------------- 徽标与标签 ---------------- */
+.ws-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: .04em;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.ws-badge--ok {
+  border-color: var(--primary-light);
+  background: var(--surface-2);
+  color: var(--primary-text);
+}
+
+.ws-badge--warn {
+  border-color: var(--status-warn);
+  background: var(--surface);
+  color: var(--status-warn);
+}
+
+.ws-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin-left: var(--sp-2);
+  padding: 0 var(--sp-2);
+  border-radius: var(--r-xs);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+}
+
+.ws-tag--shield {
+  background: var(--surface-2);
+  color: var(--primary-text);
+}
+
+/* ---------------- 上传 dropzone ---------------- */
+.ws-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+  padding: var(--sp-6) var(--sp-5);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--dur-hover), background var(--dur-hover);
+}
+
+.ws-dropzone:hover,
+.ws-dropzone.is-active {
+  border-color: var(--primary);
+  background: var(--surface);
+}
+
+.ws-drop-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-full);
+  background: var(--surface);
+  color: var(--primary);
+}
+
+.ws-field-type {
+  font-size: var(--fs-caption);
+  color: var(--text-4);
+}
+
+.ws-hidden-input {
+  display: none;
+}
+
+/* ---------------- 进度条 ---------------- */
+.ws-progress {
+  height: 6px;
+  margin-top: var(--sp-5);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.ws-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--gradient-brand);
+  transition: width var(--dur-hover);
+}
+
+/* ---------------- 分段切换（Sheet / 缺失值策略） ---------------- */
+.ws-segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  padding: var(--sp-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+}
+
+.ws-segmented > button {
+  padding: var(--sp-1) var(--sp-3);
+  border: none;
+  border-radius: var(--r-pill);
+  background: transparent;
+  font-size: var(--fs-caption);
+  color: var(--text-3);
+  cursor: pointer;
+  transition: background var(--dur-hover), color var(--dur-hover);
+}
+
+.ws-segmented > button.is-active {
+  background: var(--surface);
+  color: var(--primary-text);
+  font-weight: var(--fw-semibold);
+  box-shadow: var(--shadow-glow);
+}
+
+.ws-segmented > button:disabled {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+/* ---------------- 说明行 ---------------- */
+.ws-note-line {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-xs);
+  background: var(--surface-2);
+  font-size: var(--fs-caption);
+  color: var(--text-3);
+}
+
+.ws-note-line strong {
+  color: var(--text-1);
+  font-weight: var(--fw-semibold);
+}
+
+/* ---------------- 数据质量小结 stat-strip ---------------- */
+.ws-stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  margin-top: var(--sp-5);
+}
+
+.ws-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 72px;
+}
+
+.ws-stat-k {
+  font-size: var(--fs-label);
+  letter-spacing: .08em;
+  color: var(--text-4);
+}
+
+.ws-stat-v {
+  font-family: var(--ff-num);
+  font-size: var(--fs-subtitle);
+  font-weight: var(--fw-semibold);
+  color: var(--text-1);
+}
+
+/* ---------------- 预览分页器 ---------------- */
+.ws-pager {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.ws-missing {
+  color: var(--text-4);
+  font-style: italic;
+}
+
+.ws-empty {
+  margin-top: var(--sp-5);
+  padding: var(--sp-5);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  font-size: var(--fs-card-desc);
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* ---------------- 折叠说明 ---------------- */
+.ws-details {
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+
+.ws-details > summary {
+  font-size: var(--fs-card-desc);
+  font-weight: var(--fw-semibold);
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.ws-details ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  padding-left: var(--sp-5);
+  list-style: disc;
+  font-size: var(--fs-caption);
+  color: var(--text-3);
+}
+
+/* ---------------- 删除确认弹窗 ---------------- */
+.ws-modal-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-5);
+  /* 遮罩色由令牌派生（--text-1 的 32% 透明度），不引入硬编码色值。
+     若未来需兼容不支持 color-mix 的浏览器基线，须先在第 4 章增补遮罩令牌，
+     再在此处引用该令牌（禁止本文件私自定义色值）。 */
+  background: color-mix(in srgb, var(--text-1) 32%, transparent);
+}
+
+.ws-modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  width: 100%;
+  max-width: var(--content-narrow);
+  padding: var(--sp-6);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lift);
+}
+
+.ws-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  text-align: center;
+}
+
+.ws-modal-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  color: var(--status-warn);
+}
+
+.ws-modal-title {
+  font-size: var(--fs-subtitle);
+  color: var(--text-1);
+}
+
+.ws-modal-text {
+  font-size: var(--fs-card-desc);
+  color: var(--text-3);
+}
+
+.ws-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+}
+
+/* ---------------- 响应式：窄屏单列（UI/UX 响应式要求） ---------------- */
+@media (max-width: 1024px) {
+  .ws-grid--main,
+  .ws-grid--2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

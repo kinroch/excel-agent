@@ -469,11 +469,21 @@ def test_expired_token_is_rejected() -> None:
 
 
 def test_tampered_signature_is_rejected() -> None:
-    """签名被篡改的令牌被拒绝（防止伪造身份）。"""
+    """签名被篡改的令牌被拒绝（防止伪造身份）。
+
+    篡改位点的选择说明（这是一个真实踩到的「偶发失败」）：
+        HS256 的签名是 32 字节 HMAC，base64url 无填充编码后是 **43 个字符**。
+        42 个字符承载 252 比特，第 43 个字符只用**高 4 位**承载剩余 4 比特，
+        低 2 位是填充位。因此改动**最后一个字符**时，只要它的高 4 位与替换字符
+        相同，解码出的字节就完全一致 —— 签名依然有效，`pytest.raises` 落空，
+        用例表现为随机失败（实测约 1/16 概率）。
+        改为篡改**首个字符**：6 个比特全部有效，解码结果必然不同，用例确定失败。
+    """
     issued = create_access_token(user_id=1, role="user", remember=False)
-    # 改动签名段最后一个字符
+    # 改动签名段第一个字符（见 docstring：最后一个字符含填充位，不可用）
     head, payload_part, signature = issued.token.split(".")
-    tampered = f"{head}.{payload_part}.{signature[:-1]}{'a' if signature[-1] != 'a' else 'b'}"
+    tampered_first = "A" if signature[0] != "A" else "B"
+    tampered = f"{head}.{payload_part}.{tampered_first}{signature[1:]}"
 
     with pytest.raises(BizError) as excinfo:
         decode_token(tampered)

@@ -83,3 +83,27 @@ export function formatDelta(delta?: number | null, digits = 1): string {
   const sign = delta > 0 ? '+' : delta < 0 ? '-' : '';
   return `${sign}${Math.abs(delta).toFixed(digits)}%`;
 }
+
+/**
+ * 格式化字节数为可读大小（工作台文件列表的「大小」列）。
+ *
+ * @param bytes 字节数
+ * @returns 形如 "2.4 MB" / "356 KB" / "820 B" 的字符串；入参非法时返回 "—"
+ *
+ * 口径说明：
+ *   采用 1024 进制（KB/MB/GB）。<1KB 时直接展示字节数，避免出现 "0.4 KB" 这类
+ *   对用户无信息量的读数；保留 1 位小数并去掉多余的 ".0"（2.4 MB / 3 MB）。
+ */
+export function formatBytes(bytes?: number | null): string {
+  if (bytes == null || !Number.isFinite(bytes) || bytes < 0) return '—';
+  if (bytes < 1024) return `${bytes} B`;
+  const units = ['KB', 'MB', 'GB'] as const;
+  let value = bytes / 1024;
+  let unitIndex = 0;
+  while (value >= 1024 && unitIndex < units.length - 1) {
+    value /= 1024;
+    unitIndex += 1;
+  }
+  const rounded = Math.round(value * 10) / 10;
+  return `${rounded} ${units[unitIndex]}`;
+}

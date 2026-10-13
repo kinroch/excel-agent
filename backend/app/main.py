@@ -38,6 +38,7 @@ from app.core.logging import get_logger, set_trace_id, setup_logging
 from app.core.response import error_response, success
 from app.infra import storage
 from app.infra.db import init_database
+from app.services import file_service
 
 logger = get_logger(__name__)
 
@@ -56,6 +57,14 @@ async def lifespan(_app: FastAPI):
     logger.info("服务启动中：%s v%s", settings.app_name, settings.app_version)
     storage.ensure_dirs()  # 确保 uploads/ exports/ 存在
     init_database()  # 幂等建表（M0 验收 AC：建表脚本可重复执行）
+
+    # 崩溃恢复（M2，技术文档 3.6）：上次进程中断时残留的 pending/parsing 记录
+    # 已无对应后台任务，前端会永远轮询不到终态，故启动时统一置为 failed。
+    # 该动作不阻断启动（内部已吞异常），失败时仅记录日志。
+    recovered = file_service.fail_stale_parsing()
+    if recovered:
+        logger.warning("启动期崩溃恢复：已把 %d 条中断的解析记录置为失败", recovered)
+
     logger.info("服务启动完成，接口前缀：%s", settings.api_prefix)
 
     yield

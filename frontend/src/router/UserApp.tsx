@@ -21,6 +21,7 @@ import Report from '@/pages/user/Report';
 import Sessions from '@/pages/user/Sessions';
 import Stats from '@/pages/user/Stats';
 import Workspace from '@/pages/user/Workspace';
+import AppQueryProvider from '@/router/AppQueryProvider';
 import { RequireAuth } from '@/router/guards';
 
 /** 用户端导航项（顺序对齐 UI/UX 3.4 导航体系） */
@@ -39,34 +40,36 @@ const USER_NAV: NavItemDef[] = [
  */
 export function UserApp(): ReactElement {
   return (
-    <BrowserRouter>
-      <RequireAuth side="user">
-        <div className="app-shell">
-          <AppSidebar items={USER_NAV} side="user" brandSubtitle="用户端" />
+    <AppQueryProvider>
+      <BrowserRouter>
+        <RequireAuth side="user">
+          <div className="app-shell">
+            <AppSidebar items={USER_NAV} side="user" brandSubtitle="用户端" />
 
-          <div className="app-main">
-            {/* 顶栏：M1 已接入当前用户信息与登出（UserMenu）；M5 接入会话切换 */}
-            <header className="app-topbar">
-              <span className="page-subtitle">用户端 · 对话式数据分析</span>
-              <UserMenu side="user" />
-            </header>
+            <div className="app-main">
+              {/* 顶栏：M1 已接入当前用户信息与登出（UserMenu）；M5 接入会话切换 */}
+              <header className="app-topbar">
+                <span className="page-subtitle">用户端 · 对话式数据分析</span>
+                <UserMenu side="user" />
+              </header>
 
-            <main className="app-content">
-              <Routes>
-                <Route path="/" element={<Navigate to="/workspace" replace />} />
-                <Route path="/workspace" element={<Workspace />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/report" element={<Report />} />
-                <Route path="/sessions" element={<Sessions />} />
-                <Route path="/stats" element={<Stats />} />
-                {/* 未匹配路径回退到工作台，避免骨架期出现空白页 */}
-                <Route path="*" element={<Navigate to="/workspace" replace />} />
-              </Routes>
-            </main>
+              <main className="app-content">
+                <Routes>
+                  <Route path="/" element={<Navigate to="/workspace" replace />} />
+                  <Route path="/workspace" element={<Workspace />} />
+                  <Route path="/chat" element={<Chat />} />
+                  <Route path="/report" element={<Report />} />
+                  <Route path="/sessions" element={<Sessions />} />
+                  <Route path="/stats" element={<Stats />} />
+                  {/* 未匹配路径回退到工作台，避免骨架期出现空白页 */}
+                  <Route path="*" element={<Navigate to="/workspace" replace />} />
+                </Routes>
+              </main>
+            </div>
           </div>
-        </div>
-      </RequireAuth>
-    </BrowserRouter>
+        </RequireAuth>
+      </BrowserRouter>
+    </AppQueryProvider>
   );
 }
 
